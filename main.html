@@ -6,78 +6,86 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 </head>
 <body>
-
+  <button onclick="myFunction()">Click me to download svg</button>
+  <div id="drawing"></div>
 </body>
 
 <script>
-// initialize SVG.js
-var pagex_size = 1080
-var pagey_size = 1620
-var draw = SVG().addTo('body').size(pagex_size, pagey_size)
-draw.rect(pagex_size, pagey_size)
-        .fill('#fff')
-        .stroke({ color: '#000', opacity: 1, width: 2 })
-var year = 2020
-var day_names = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
-var month_names = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sept","Oct","Nov","Dec"]
-var rows = 2
-var days_in_month = [31, 28, 31, 30, 31, 30,31,31, 30 ,31, 30, 31]
-var months_in_row = 6
-var rect_width = 166
-var rect_height = 20
-var page_xoffset = 30
-var page_yoffset = 120
-var row_gap = 700
+var draw
+var year = 2021
+SVG.on(document, 'DOMContentLoaded', function() {
+  // initialize SVG.js
+  var pagex_size = 1080
+  var pagey_size = 1620
+  draw = SVG().addTo('#drawing').size(pagex_size, pagey_size)
+  draw.rect(pagex_size, pagey_size)
+    .fill('#fff')
+    .stroke({ color: '#000', opacity: 1, width: 2 })
+  var day_names = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"]
+  var month_names = ["Jan","Feb","Mar","Apr","May","June","July","Aug","Sept","Oct","Nov","Dec"]
+  var rows = 2
+  var days_in_month = [31, 28, 31, 30, 31, 30,31,31, 30 ,31, 30, 31]
+  var months_in_row = 6
+  var rect_width = 166
+  var rect_height = 20
+  var page_xoffset = 30
+  var page_yoffset = 120
+  var row_gap = 700
 
-draw
-  .text('Calendar ' + String(year))
-  .move(page_xoffset, page_yoffset-100)
-  .font({ 
-    fill: '#f06', 
-    family: 'Inconsolata', 
-    weight: 'bold',
-    size: 48})
+  draw
+    .text('Calendar ' + String(year))
+    .move(page_xoffset, page_yoffset-100)
+    .font({ 
+      fill: '#f06', 
+      family: 'Inconsolata', 
+      weight: 'bold',
+      size: 48})
 
-Array.from({length: rows}, (_, row_idx) => {
-  Array.from({length: months_in_row}, (_, m_idx) => {
-    x_pos = page_xoffset + (m_idx* rect_width)
-    month_number = (row_idx*months_in_row) + m_idx
-    Array.from({length: days_in_month[month_number]}, (_, day) => {
-      y_pos = (row_idx*row_gap) + (page_yoffset+ day*rect_height)
+  Array.from({length: rows}, (_, row_idx) => {
+    Array.from({length: months_in_row}, (_, m_idx) => {
+      x_pos = page_xoffset + (m_idx* rect_width)
+      month_number = (row_idx*months_in_row) + m_idx
+      Array.from({length: days_in_month[month_number]}, (_, day) => {
+        y_pos = (row_idx*row_gap) + (page_yoffset+ day*rect_height)
 
-      var d = new Date(String(year)+'-' + String(month_number+1) + '-' + String(day+1));
-      day_color = '#fff'
-      if (d.getDay() == 0 || d.getDay() == 6) {
-        // Holiday
-        day_color = '#ebc891'
-      }
-      draw.rect(rect_width, rect_height)
-        .fill(day_color)
-        .stroke({ color: '#000', opacity: 1, width: 2 })
-        .attr({ x: x_pos, y: y_pos })
+        var d = new Date(String(year)+'-' + String(month_number+1) + '-' + String(day+1));
+        day_color = '#fff'
+        if (d.getDay() == 0 || d.getDay() == 6) {
+          // Holiday
+          day_color = '#ebc891aa'
+        }
+        draw.rect(rect_width, rect_height)
+          .fill(day_color)
+          .stroke({ color: '#000', opacity: 1, width: 2 })
+          .attr({ x: x_pos, y: y_pos })
 
+        draw
+          .text(String(day + 1))
+          .move( x_pos + 3, y_pos + 3)
+          .font({ fill: '#f06', family: 'Inconsolata' })
+
+        draw
+          .text(day_names[d.getDay()])
+          .move( x_pos + 25, y_pos + 3)
+          .font({ fill: '#f06', family: 'Inconsolata', size: 14})
+      })
       draw
-        .text(String(day + 1))
-        .move( x_pos + 3, y_pos + 3)
-        .font({ fill: '#f06', family: 'Inconsolata' })
+        .text(month_names[m_idx + (months_in_row*row_idx)])
+        .move( x_pos + 13, (page_yoffset - 20)+ (row_idx*row_gap))
+        .font({ 
+          fill: '#f06', 
+          weight: 'bold',
+          family: 'Inconsolata' })
 
-      draw
-        .text(day_names[d.getDay()])
-        .move( x_pos + 25, y_pos + 3)
-        .font({ fill: '#f06', family: 'Inconsolata', size: 14})
     })
-    draw
-      .text(month_names[m_idx + (months_in_row*row_idx)])
-      .move( x_pos + 13, (page_yoffset - 20)+ (row_idx*row_gap))
-      .font({ 
-        fill: '#f06', 
-        weight: 'bold',
-        family: 'Inconsolata' })
-
   })
 })
-var blob = new Blob([draw.svg()], {type: "text/plain;charset=utf-8"});
-saveAs(blob, "Calendar_"+ String(year)+".svg");
+
+function myFunction() {
+  console.log("asdf")
+  var blob = new Blob([draw.svg()], {type: "text/plain;charset=utf-8"});
+  saveAs(blob, "Calendar_"+ String(year)+".svg");
+}
 </script>
 
 </html>
