@@ -3,6 +3,7 @@
 <head>
   <title>SVG.js</title>
   <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.0/FileSaver.min.js"></script>
 </head>
 <body>
 
@@ -10,8 +11,10 @@
 
 <script>
 // initialize SVG.js
-var draw = SVG().addTo('body').size(1080, 2080)
-draw.rect(1080, 2080)
+var pagex_size = 1080
+var pagey_size = 1620
+var draw = SVG().addTo('body').size(pagex_size, pagey_size)
+draw.rect(pagex_size, pagey_size)
         .fill('#fff')
         .stroke({ color: '#000', opacity: 1, width: 2 })
 var year = 2020
@@ -22,13 +25,13 @@ var days_in_month = [31, 28, 31, 30, 31, 30,31,31, 30 ,31, 30, 31]
 var months_in_row = 6
 var rect_width = 166
 var rect_height = 20
-var page_xoffset = 20
-var page_yoffset = 90
+var page_xoffset = 30
+var page_yoffset = 120
 var row_gap = 700
 
 draw
   .text('Calendar ' + String(year))
-  .move(page_xoffset-10, page_yoffset-90)
+  .move(page_xoffset, page_yoffset-100)
   .font({ 
     fill: '#f06', 
     family: 'Inconsolata', 
@@ -73,7 +76,8 @@ Array.from({length: rows}, (_, row_idx) => {
 
   })
 })
-<!-- console.log(draw.svg()) -->
+var blob = new Blob([draw.svg()], {type: "text/plain;charset=utf-8"});
+saveAs(blob, "Calendar_"+ String(year)+".svg");
 </script>
 
 </html>
