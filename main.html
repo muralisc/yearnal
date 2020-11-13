@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>SVG.js</title>
+  <script src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script>
+</head>
+<body>
+
+</body>
+
+<script>
+  // initialize SVG.js
+  var draw = SVG().addTo('body').size(1080, 1080)
+
+  var days_in_month = 31
+  var months_in_row = 6
+Array.from({length: months_in_row}, (_, m_idx) => {
+  Array.from({length: days_in_month}, (_, day) => {
+    x_pos = 20 + (m_idx*150)
+    y_pos = (60+ day*30)
+    draw.rect(150, 30)
+      .fill('#fff')
+      .stroke({ color: '#000', opacity: 1, width: 2 })
+      .attr({ x: x_pos, y: y_pos })
+    draw
+      .text(String(day + 1))
+      .move( x_pos + 3, y_pos + 3)
+      .font({ fill: '#f06', family: 'Inconsolata' })
+  })
+})
+
+console.log(draw.svg())
+</script>
+
+</html>
