@@ -60,17 +60,20 @@ SVG.on(document, 'DOMContentLoaded', function() {
 
         var d = new Date(String(year)+'-' + String(month_number+1) + '-' + String(day+1));
         var day_color = '#fff'
-        var holiday_color = '#6784eb55'
+        var day_style = "opacity:1"
+        var holiday_color = '#6784eb'
+        var holiday_style = "opacity:0.55"
         var day_name_color = '#f52b02'
         if (d.getDay() == 0 || d.getDay() == 6) {
           // Holiday
           day_color = holiday_color
           day_name_color = '#0000ff'
+          day_style = holiday_style
         }
         draw.rect(rect_width, rect_height)
           .fill(day_color)
           .stroke({ color: '#000', opacity: 1, width: 2 })
-          .attr({ x: x_pos, y: y_pos })
+          .attr({ x: x_pos, y: y_pos, style: day_style })
 
         draw
           .text(String(day + 1))
