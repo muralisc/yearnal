@@ -12,7 +12,7 @@
 
 <script>
 var draw
-var year = 2021
+var year = 2022
 function leapYear(year)
 {
   return ((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0);
@@ -58,7 +58,7 @@ SVG.on(document, 'DOMContentLoaded', function() {
       Array.from({length: days_in_month[month_number]}, (_, day) => {
         y_pos = (row_idx*row_gap) + (page_yoffset+ day*rect_height)
 
-        var d = new Date(String(year)+'-' + String(month_number+1) + '-' + String(day+1));
+        var d = new Date(String(year) + '-' + String(month_number+1) + '-' + String(day+1));
         var day_color = '#fff'
         var day_style = "opacity:1"
         var holiday_color = '#6784eb'
@@ -100,9 +100,18 @@ SVG.on(document, 'DOMContentLoaded', function() {
           weight: 'bold',
           size: 24,
           family: 'Inconsolata' })
-
     })
   })
+
+  var link = draw.link('https://github.com/muralisc/yearnal')
+  link
+    .text('Created with github.com/muralisc/yearnal')
+    .move(page_xoffset, page_yoffset + (rows * row_gap) )
+    .font({ 
+      fill: '#00b', 
+      family: 'Inconsolata', 
+      weight: 'regular',
+      size: 18})
 })
 
 function myFunction() {
